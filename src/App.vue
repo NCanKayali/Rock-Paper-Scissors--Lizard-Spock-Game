@@ -4,7 +4,7 @@
     <div class="game-container">
       <div class="you">
         <h3 class="title who">You</h3>
-        <p class="player-image">{{ selectedCard }}</p>
+        <p class="player-image">{{ selectedCard.image }}</p>
       </div>
       <div class="computer">
         <h3 class="title who">Computer</h3>
@@ -21,7 +21,7 @@
     <div>
       <transition-group name="rotateAll" appear class="items">
         <button
-          @click="choice(item.image)"
+          @click="checkResult(item)"
           class="image"
           v-for="item in game"
           :key="item.image"
@@ -38,14 +38,14 @@ export default {
   data() {
     return {
       game: [
-        { image: "🧱" },
-        { image: "📰" },
-        { image: "✂️" },
-        { image: "🦎" },
-        { image: "🖖" },
+        { image: "🧱", name: "rock" }, //
+        { image: "📰", name: "paper" }, //1
+        { image: "✂️", name: "scissors" }, //0
+        { image: "🦎", name: "lizard" }, // 0
+        { image: "🖖", name: "spock" }, //1
       ],
       answer: {},
-      selectedCard: null,
+      selectedCard: {},
       result: null,
     };
   },
@@ -54,15 +54,50 @@ export default {
       let answer = Math.ceil(Math.random() * this.game.length);
       this.answer = this.game[answer - 1];
     },
-    choice(img) {
+    checkResult(item) {
       this.random();
-      this.selectedCard = img;
-      if (this.selectedCard == this.answer.image) {
-        this.result = "Kazandın";
-      } else {
-        this.result = "Kaybettin";
+      this.selectedCard = item;
+
+      switch (this.selectedCard.name) {
+        case "rock":
+          if (this.answer.name == "lizard" || this.answer.name == "scissors") {
+            this.result = "Kazandın";
+          } else {
+            this.result = "Kaybettin";
+          }
+          break;
+        case "paper":
+          if (this.answer.name == "rock" || this.answer.name == "spock") {
+            this.result = "Kazandın";
+          } else {
+            this.result = "Kaybettin";
+          }
+          break;
+        case "scissors":
+          if (this.answer.name == "lizard" || this.answer.name == "paper") {
+            this.result = "Kazandın";
+          } else {
+            this.result = "Kaybettin";
+          }
+          break;
+        case "lizard":
+          if (this.answer.name == "paper" || this.answer.name == "spock") {
+            this.result = "Kazandın";
+          } else {
+            this.result = "Kaybettin";
+          }
+          break;
+        case "spock":
+          if (this.answer.name == "scissors" || this.answer.name == "rock") {
+            this.result = "Kazandın";
+          } else {
+            this.result = "Kaybettin";
+          }
+          break;
       }
-      created();
+      if (item.name == this.answer.name) {
+        this.result = "Berabere";
+      }
     },
   },
 };
