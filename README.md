@@ -1,4 +1,4 @@
-# gelismiscomponents
+# Gama-Project
 
 > A Vue.js project
 
